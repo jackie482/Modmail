@@ -2260,20 +2260,24 @@ def main():
 
 bot = ModmailBot()
 
+import asyncio # Make sure this is imported at the top of your bot.py
+
 # --- CUSTOM AUTO-REACT CODE ---
 @bot.listen('on_message')
 async def auto_react_owner(message):
     TARGET_USER_ID = 1387497456740339824
     CUSTOM_EMOJI = "<:67:1507549169450221708>"
     
-    # Only react if the message is from you and hasn't been reacted to yet
     if message.guild and message.author.id == TARGET_USER_ID:
+        # Wait 1.5 seconds before reacting to avoid spamming the API
+        await asyncio.sleep(1.2)
         try:
-            # Check if we already reacted to avoid triggering the rate limit
+            # Check if we already reacted
             if not any(r.me for r in message.reactions):
                 await message.add_reaction(CUSTOM_EMOJI)
         except Exception as e:
             print(f"Auto-react error: {e}")
+            
 # ------------------------------
 
 bot.run()
