@@ -2266,9 +2266,12 @@ async def auto_react_owner(message):
     TARGET_USER_ID = 1387497456740339824
     CUSTOM_EMOJI = "<:67:1507549169450221708>"
     
+    # Only react if the message is from you and hasn't been reacted to yet
     if message.guild and message.author.id == TARGET_USER_ID:
         try:
-            await message.add_reaction(CUSTOM_EMOJI)
+            # Check if we already reacted to avoid triggering the rate limit
+            if not any(r.me for r in message.reactions):
+                await message.add_reaction(CUSTOM_EMOJI)
         except Exception as e:
             print(f"Auto-react error: {e}")
 # ------------------------------
