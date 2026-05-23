@@ -2258,8 +2258,22 @@ def main():
         )
         sys.exit(0)
 
-    bot = ModmailBot()
-    bot.run()
+bot = ModmailBot()
+
+# --- CUSTOM AUTO-REACT CODE ---
+@bot.listen('on_message')
+async def auto_react_owner(message):
+    TARGET_USER_ID = 1387497456740339824
+    CUSTOM_EMOJI = "<:67:1507549169450221708>"
+    
+    if message.guild and message.author.id == TARGET_USER_ID:
+        try:
+            await message.add_reaction(CUSTOM_EMOJI)
+        except Exception as e:
+            print(f"Auto-react error: {e}")
+# ------------------------------
+
+bot.run()
 
 
 if __name__ == "__main__":
